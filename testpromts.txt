@@ -1,0 +1,36 @@
+//Анализ на мач
+Match: Liverpool vs Chelsea
+Competition: Premier League
+Venue: Anfield
+
+Liverpool will play 4-3-3 with high press and quick wing attacks.
+Chelsea will play 4-2-3-1 with compact midfield and fast transitions.
+Liverpool strength: intensity and chance creation at home.
+Chelsea strength: counter-attacks behind the full-backs.
+
+Please provide:
+
+Tactical analysis of both teams
+Key player duels
+Team strengths and weaknesses
+Critical moments that can decide the game
+Overall match assessment
+
+
+
+//Предикт на мач
+Match: Real Madrid vs Barcelona
+Competition: La Liga
+Date: 2026-04-20
+Venue: Santiago Bernabeu
+
+Recent form:
+Real Madrid: W-W-D-W-L
+Barcelona: W-W-W-D-W
+
+Home/Away trend:
+Real at home: very strong pressing and transition goals
+Barcelona away: good ball control but vulnerable on counters
+Key absences: Barcelona missing one starting center-back
+Key duels: Vinicius vs Kounde, Bellingham vs De Jong, Lewandowski vs Rudiger
+Expected style: Real direct and fast, Barcelona possession-based

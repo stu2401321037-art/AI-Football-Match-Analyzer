@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <!-- Правим сайта да е респонсив -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Football Match Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚽ AI Football Match Analyzer</h1>
+            <p>Powered by Google Gemini AI</p>
+        </header>
+
+        <main>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="analyze">Match Analysis</button>
+                <button class="tab-btn" data-tab="predict">Outcome Prediction</button>
+            </div>
+
+            <!-- Таба за анализ на мач -->
+            <div id="analyze" class="tab-content active">
+                <div class="form-section">
+                    <h2>Analyze a Match</h2>
+                    <form id="analyzeForm">
+                        <div class="form-group">
+                            <label for="matchInfo">Match Information:</label>
+                            <textarea 
+                                id="matchInfo" 
+                                name="matchInfo" 
+                                rows="8"
+                                placeholder="Enter match details here. Include:&#10;- Teams involved&#10;- Date and competition&#10;- Key players&#10;- Recent form&#10;- Head-to-head history&#10;- Injuries/Suspensions&#10;- Tactical formations"
+                                required
+                            ></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Analyze Match</button>
+                    </form>
+                </div>
+
+                <div id="analyzeResult" class="result-section hidden">
+                    <h3>Analysis Results:</h3>
+                    <div id="analyzeOutput" class="output-box"></div>
+                </div>
+            </div>
+
+            <!-- Таба за предикт на мач -->
+            <div id="predict" class="tab-content">
+                <div class="form-section">
+                    <h2>Predict Match Outcome</h2>
+                    <form id="predictForm">
+                        <div class="form-group">
+                            <label for="matchDetails">Match Details:</label>
+                            <textarea 
+                                id="matchDetails" 
+                                name="matchDetails" 
+                                rows="8"
+                                placeholder="Enter match details for prediction. Include:&#10;- Teams competing&#10;- Current league position&#10;- Recent performance (last 5 matches)&#10;- Home/Away advantage&#10;- Head-to-head record&#10;- Key player availability&#10;- Historical data if available"
+                                required
+                            ></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Get Prediction</button>
+                    </form>
+                </div>
+
+                <div id="predictResult" class="result-section hidden">
+                    <h3>Prediction Results:</h3>
+                    <div id="predictOutput" class="output-box"></div>
+                </div>
+            </div>
+
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Analyzing with AI...</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 AI Football Match Analyzer | Powered by Google Gemini AI</p>
+        </footer>
+    </div>
+
+    <script>
+         //Локиката за табовете
+         //Добавяме събития на всички бутони за табове
+         //Смяна между анализ и предикт табовете
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabName = this.dataset.tab;
+                
+                //Скриваме всички табове
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                
+                //Премахваме активния клас от всички бутони
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                
+                //Показваме избрания таб и го правим активен
+                document.getElementById(tabName).classList.add('active');
+                this.classList.add('active');
+            });
+        });
+
+        //Тук е отговорът на Гемини
+        function formatResponse(text) {
+            return text
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/^(\d+\.|##|###|-)/gm, '<span class="highlight">$1</span>');
+        }
+
+        //Обработка на формата за анализ на мач
+        document.getElementById('analyzeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const matchInfo = document.getElementById('matchInfo').value;
+            
+            //Проверка дали е въведена информация за мача
+            if (!matchInfo.trim()) {
+                alert('Please enter match information');
+                return;
+            }
+
+            showLoading(true);
+
+            
+            try {
+                //Пост заявка към бекенда за анализ на мач
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ match_info: matchInfo })
+                });
+
+                const data = await response.json();
+                
+                //Показва резултата от анализа или грешка ако има такава
+                if (response.ok) {
+                    document.getElementById('analyzeOutput').innerHTML = formatResponse(data.analysis);
+                    document.getElementById('analyzeResult').classList.remove('hidden');
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error occurred'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error analyzing match: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        //Същата логика като горната но за предикт на мач
+        document.getElementById('predictForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const matchDetails = document.getElementById('matchDetails').value;
+            
+            if (!matchDetails.trim()) {
+                alert('Please enter match details');
+                return;
+            }
+
+            showLoading(true);
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ match_details: matchDetails })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('predictOutput').innerHTML = formatResponse(data.prediction);
+                    document.getElementById('predictResult').classList.remove('hidden');
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error occurred'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error getting prediction: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        //Функция за показване и скриване на лоудинг спинера
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.remove('hidden');
+            } else {
+                loading.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
