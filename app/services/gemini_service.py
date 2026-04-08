@@ -17,8 +17,8 @@ class GeminiService:
         if not api_key:
             raise ValueError("GEMINI_API_KEY environment variable not set")
 
-        #Идентификатор на модела
-        model_id = "gemini-2.5-flash"
+        #Идентификатор на модела 
+        model_id = "gemini-2.0-flash"
         self.model_id = os.getenv('GEMINI_MODEL', model_id)
     
     #Промпт който да се показва в сайта като пример за анализ на мач 

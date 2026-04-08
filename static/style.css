@@ -143,6 +143,36 @@ textarea:focus {
     width: 100%;
 }
 
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.action-buttons .btn-submit {
+    flex: 1;
+}
+
+.btn-clear {
+    background: #f3f5ff;
+    color: #4d5fb8;
+    padding: 15px 26px;
+    border: 2px solid #cfd6ff;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-clear:hover {
+    background: #e9eeff;
+    border-color: #b7c3ff;
+}
+
+.btn-clear:active {
+    transform: translateY(1px);
+}
+
 .btn-submit:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
@@ -271,5 +301,9 @@ footer {
     .output-box {
         font-size: 0.95em;
         padding: 15px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
     }
 }

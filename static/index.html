@@ -35,7 +35,10 @@
                                 required
                             ></textarea>
                         </div>
-                        <button type="submit" class="btn-submit">Analyze Match</button>
+                        <div class="action-buttons">
+                            <button type="submit" class="btn-submit">Analyze Match</button>
+                            <button type="button" id="clearAnalyze" class="btn-clear">Clear</button>
+                        </div>
                     </form>
                 </div>
 
@@ -60,7 +63,10 @@
                                 required
                             ></textarea>
                         </div>
-                        <button type="submit" class="btn-submit">Get Prediction</button>
+                        <div class="action-buttons">
+                            <button type="submit" class="btn-submit">Get Prediction</button>
+                            <button type="button" id="clearPredict" class="btn-clear">Clear</button>
+                        </div>
                     </form>
                 </div>
 
@@ -200,6 +206,27 @@
                 loading.classList.add('hidden');
             }
         }
+
+        function clearSection(formId, inputId, outputId, resultId) {
+            const form = document.getElementById(formId);
+            const input = document.getElementById(inputId);
+            const output = document.getElementById(outputId);
+            const result = document.getElementById(resultId);
+
+            form.reset();
+            input.value = '';
+            output.innerHTML = '';
+            result.classList.add('hidden');
+            input.focus();
+        }
+
+        document.getElementById('clearAnalyze').addEventListener('click', () => {
+            clearSection('analyzeForm', 'matchInfo', 'analyzeOutput', 'analyzeResult');
+        });
+
+        document.getElementById('clearPredict').addEventListener('click', () => {
+            clearSection('predictForm', 'matchDetails', 'predictOutput', 'predictResult');
+        });
     </script>
 </body>
 </html>
